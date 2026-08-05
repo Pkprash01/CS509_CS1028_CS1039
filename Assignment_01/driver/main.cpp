@@ -4,7 +4,7 @@
 #include <chrono>
 #include <climits>
 #include <iomanip>
-#include "../src/sssp.h"
+#include "sssp.hpp"
 
 using namespace std;
 

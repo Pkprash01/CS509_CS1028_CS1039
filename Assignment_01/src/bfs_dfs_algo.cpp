@@ -1,4 +1,5 @@
 #include "bfs_dfs_algo.hpp"
+#include "csr_graph.hpp"
 #include <chrono>
 
 BFSResult run_bfs(const CSRGraph& graph, int source) {
@@ -9,7 +10,7 @@ BFSResult run_bfs(const CSRGraph& graph, int source) {
     res.traversal = new int[V];
     res.num_vertices = V;
 
-    int* queue = new int[V];
+    int* q = new int[V];
 
     for (int i = 0; i < V; ++i) {
         res.distances[i] = -1;
@@ -17,88 +18,87 @@ BFSResult run_bfs(const CSRGraph& graph, int source) {
 
     int head = 0;
     int tail = 0;
-    int traversal_count = 0;
+    int count = 0;
 
-    //TIMING STARTS HERE
-    auto start = std::chrono::high_resolution_clock::now();
+    auto start_time = std::chrono::high_resolution_clock::now();
 
     res.distances[source] = 0;
-    queue[tail++] = source;
+    q[tail++] = source;
 
     while (head < tail) {
-        int u = queue[head++];
-        res.traversal[traversal_count++] = u;
+        int u = q[head++];
+        res.traversal[count++] = u;
 
-        int start_idx = graph.row_ptr[u];
-        int end_idx = graph.row_ptr[u + 1];
+        int row_start = graph.row_ptr[u];
+        int row_end = graph.row_ptr[u + 1];
 
-        for (int i = start_idx; i < end_idx; ++i) {
+        for (int i = row_start; i < row_end; ++i) {
             int v = graph.col_idx[i];
             if (res.distances[v] == -1) {
                 res.distances[v] = res.distances[u] + 1;
-                queue[tail++] = v;
+                q[tail++] = v;
             }
         }
     }
 
-    auto end = std::chrono::high_resolution_clock::now();
-    //TIMING ENDS HERE
+    auto end_time = std::chrono::high_resolution_clock::now();
 
-    res.execution_time_ms = std::chrono::duration<double, std::milli>(end - start).count();
-    res.traversal_size = traversal_count;
+    auto duration_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+    res.execution_time_ms = static_cast<double>(duration_ns) / 1000.0; // Microseconds (us)
+    res.traversal_size = count;
 
-    delete[] queue;
+    delete[] q;
     return res;
 }
 
 DFSResult run_dfs(const CSRGraph& graph, int source) {
     DFSResult res;
-    int V = graph.V; // <-- Updated from graph.num_vertices to graph.V
+    int V = graph.V;
 
     res.traversal = new int[V];
     bool* visited = new bool[V];
-    int* stack = new int[V];
+
+    int stack_capacity = (graph.E > V) ? graph.E : V;
+    int* st = new int[stack_capacity];
 
     for (int i = 0; i < V; ++i) {
         visited[i] = false;
     }
 
     int top = 0;
-    int traversal_count = 0;
+    int count = 0;
 
-    //TIMING STARTS HERE
-    auto start = std::chrono::high_resolution_clock::now();
+    auto start_time = std::chrono::high_resolution_clock::now();
 
-    stack[top++] = source;
+    st[top++] = source;
 
     while (top > 0) {
-        int u = stack[--top];
+        int u = st[--top];
 
         if (!visited[u]) {
             visited[u] = true;
-            res.traversal[traversal_count++] = u;
+            res.traversal[count++] = u;
 
-            int start_idx = graph.row_ptr[u];
-            int end_idx = graph.row_ptr[u + 1];
+            int row_start = graph.row_ptr[u];
+            int row_end = graph.row_ptr[u + 1];
 
-            // Traverse neighbors in reverse order so lower indexed neighbors are visited first
-            for (int i = end_idx - 1; i >= start_idx; --i) {
+            for (int i = row_end - 1; i >= row_start; --i) {
                 int v = graph.col_idx[i];
                 if (!visited[v]) {
-                    stack[top++] = v;
+                    st[top++] = v;
                 }
             }
         }
     }
 
-    auto end = std::chrono::high_resolution_clock::now();
-    //TIMING ENDS HERE
+    auto end_time = std::chrono::high_resolution_clock::now();
 
-    res.execution_time_ms = std::chrono::duration<double, std::milli>(end - start).count();
-    res.traversal_size = traversal_count;
+    auto duration_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+    res.execution_time_ms = static_cast<double>(duration_ns) / 1000.0; // Microseconds (us)
+    res.traversal_size = count;
 
     delete[] visited;
-    delete[] stack;
+    delete[] st;
 
     return res;
 }

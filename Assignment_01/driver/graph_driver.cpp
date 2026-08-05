@@ -1,11 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <iomanip> // Needed for std::fixed and std::setprecision
+#include <iomanip>
 #include "../src/csr_graph.hpp"
 #include "../src/bfs_dfs_algo.hpp"
 
-// Unified print function targeting any stream
+// Print function for BFS results
 void print_bfs_results(std::ostream& os, int source, const BFSResult& res) {
     os << "Algorithm: BFS\n";
     os << "Source: " << source << "\n";
@@ -20,11 +20,12 @@ void print_bfs_results(std::ostream& os, int source, const BFSResult& res) {
         else
             os << i << " " << res.distances[i] << "\n";
     }
-    // Formats execution time to 4 decimal places (e.g., 0.0035 ms)
-    os << std::fixed << std::setprecision(4);
-    os << "Execution time: " << res.execution_time_ms << " ms\n";
+    // Formats execution time in microseconds (us) with 6 decimal places
+    os << std::fixed << std::setprecision(6);
+    os << "Execution time: " << res.execution_time_ms << " us\n";
 }
 
+// Print function for DFS results
 void print_dfs_results(std::ostream& os, int source, const DFSResult& res) {
     os << "Algorithm: DFS\n";
     os << "Source: " << source << "\n";
@@ -32,9 +33,9 @@ void print_dfs_results(std::ostream& os, int source, const DFSResult& res) {
     for (int i = 0; i < res.traversal_size; ++i) {
         os << res.traversal[i] << (i + 1 == res.traversal_size ? "" : " ");
     }
-    // Formats execution time to 4 decimal places (e.g., 0.0028 ms)
-    os << std::fixed << std::setprecision(4);
-    os << "\nExecution time: " << res.execution_time_ms << " ms\n";
+    // Formats execution time in microseconds (us) with 6 decimal places
+    os << std::fixed << std::setprecision(6);
+    os << "\nExecution time: " << res.execution_time_ms << " us\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -58,7 +59,6 @@ int main(int argc, char* argv[]) {
 
         BFSResult bfs_res = run_bfs(csr, source_vertex);
 
-        // CONTROL LOGIC: Write to File OR Terminal
         if (!out_filepath.empty()) {
             std::ofstream outfile(out_filepath.c_str());
             if (outfile.is_open()) {
@@ -84,7 +84,6 @@ int main(int argc, char* argv[]) {
 
         DFSResult dfs_res = run_dfs(csr, source_vertex);
 
-        // CONTROL LOGIC: Write to File OR Terminal
         if (!out_filepath.empty()) {
             std::ofstream outfile(out_filepath.c_str());
             if (outfile.is_open()) {

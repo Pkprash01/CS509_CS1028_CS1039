@@ -1,4 +1,4 @@
-#include "sssp.h"
+#include "sssp.hpp"
 #include <cstdlib>
 #include <climits>
 
