@@ -4,90 +4,124 @@
 
 using namespace std;
 
-void displayMenu() {
+void showMenu() {
     cout << "\n==============================================" << endl;
-    cout << "       CS509 ASSIGNMENT 01: SSSP WRAPPER      " << endl;
+    cout << "   CS509 ASSIGNMENT 01: FULL BUDDY WRAPPER    " << endl;
     cout << "==============================================" << endl;
-    cout << "1. Compile SSSP Driver" << endl;
-    cout << "2. Run SSSP with a Selected Test File" << endl;
-    cout << "3. Run SSSP with All Default Test Files" << endl;
-    cout << "4. Exit" << endl;
+    cout << "1. Compile All Modules (SSSP, BFS, DFS, CSR)" << endl;
+    cout << "2. Run SSSP Test" << endl;
+    cout << "3. Run BFS Test" << endl;
+    cout << "4. Run DFS Test" << endl;
+    cout << "5. Run Full Test Suite (All Algorithms)" << endl;
+    cout << "6. Exit" << endl;
     cout << "==============================================" << endl;
-    cout << "Select an option (1-4): ";
+    cout << "Select an option (1-6): ";
 }
 
-bool compileSSSP() {
-    cout << "\n[Compiling SSSP Module...]" << endl;
-    
-    // Compiles executable as sssp_app.exe inside assignment_01
-    int status = system("g++ -O2 -I assignment_01/src assignment_01/driver/main.cpp assignment_01/src/sssp.cpp -o assignment_01/sssp_app.exe");
-    
-    if (status == 0) {
-        cout << "Compilation successful! Executable: assignment_01\\sssp_app.exe" << endl;
+bool compileAll() {
+    cout << "\n[Compiling All Assignment 01 Modules...]" << endl;
+
+    int statusSSSP = system("g++ -O2 -I Assignment_01/src Assignment_01/driver/main.cpp Assignment_01/src/sssp.cpp -o Assignment_01/sssp_app.exe");
+    int statusBFSDFS = system("g++ -O2 -I Assignment_01/src Assignment_01/driver/graph_driver.cpp Assignment_01/src/bfs_dfs_algo.cpp Assignment_01/src/csr_graph.cpp -o Assignment_01/graph_app.exe");
+
+    if (statusSSSP == 0 && statusBFSDFS == 0) {
+        cout << "Compilation successful! Executables built in Assignment_01\\" << endl;
         return true;
     }
-    
-    cout << "Error: Compilation failed. Please verify your source files." << endl;
+
+    cout << "Error during compilation! Check source files in Assignment_01\\src\\" << endl;
     return false;
 }
 
-void runSingleTest() {
+void runSSSPTest() {
     string fileName;
-    cout << "\nEnter ONLY the test file name (e.g., sssp_100.txt, test_01.txt): ";
+    cout << "\nEnter SSSP test file name (e.g., test_01.txt, sssp_100.txt): ";
     cin >> fileName;
 
-    // Windows compatible execution path without leading './'
-    string command = "assignment_01\\sssp_app.exe assignment_01\\tests\\" + fileName;
-    cout << "\nExecuting command: " << command << endl;
+    string command = "Assignment_01\\sssp_app.exe Assignment_01\\tests\\" + fileName;
+    cout << "\nExecuting SSSP: " << command << endl;
     cout << "----------------------------------------------" << endl;
-    
-    int status = system(command.c_str());
-    if (status != 0) {
-        cout << "Execution error: Could not run test file. Make sure it exists in assignment_01\\tests\\" << endl;
-    }
+    system(command.c_str());
 }
 
-void runAllTests() {
-    cout << "\n[Running SSSP Full Test Suite...]" << endl;
-    
-    string testSuite[] = {"test_01.txt", "sssp_10.txt", "sssp_100.txt", "sssp_1000.txt"};
-    int totalFiles = 4;
+void runBFSTest() {
+    string fileName;
+    cout << "\nEnter BFS test file name (e.g., test_01.txt, graph_10.txt): ";
+    cin >> fileName;
 
-    for (int i = 0; i < totalFiles; i++) {
+    string command = "Assignment_01\\graph_app.exe bfs Assignment_01\\tests\\" + fileName;
+    cout << "\nExecuting BFS: " << command << endl;
+    cout << "----------------------------------------------" << endl;
+    system(command.c_str());
+}
+
+void runDFSTest() {
+    string fileName;
+    cout << "\nEnter DFS test file name (e.g., test_01.txt, graph_10.txt): ";
+    cin >> fileName;
+
+    string command = "Assignment_01\\graph_app.exe dfs Assignment_01\\tests\\" + fileName;
+    cout << "\nExecuting DFS: " << command << endl;
+    cout << "----------------------------------------------" << endl;
+    system(command.c_str());
+}
+
+void runTestSuite() {
+    cout << "\n[Running Complete Test Suite...]" << endl;
+    
+    string testFiles[] = {"test_01.txt", "sssp_10.txt", "sssp_100.txt"};
+    int total = 3;
+
+    for (int i = 0; i < total; i++) {
         cout << "\n==============================================" << endl;
-        cout << "Running Test Case (" << (i + 1) << "/" << totalFiles << "): " << testSuite[i] << endl;
+        cout << "Testing File (" << (i + 1) << "/" << total << "): " << testFiles[i] << endl;
         cout << "==============================================" << endl;
-        
-        string command = "assignment_01\\sssp_app.exe assignment_01\\tests\\" + testSuite[i];
-        system(command.c_str());
+
+        string cmdSSSP = "Assignment_01\\sssp_app.exe Assignment_01\\tests\\" + testFiles[i];
+        cout << "-> Running SSSP..." << endl;
+        system(cmdSSSP.c_str());
+
+        string cmdBFS = "Assignment_01\\graph_app.exe bfs Assignment_01\\tests\\" + testFiles[i];
+        cout << "\n-> Running BFS..." << endl;
+        system(cmdBFS.c_str());
+
+        string cmdDFS = "Assignment_01\\graph_app.exe dfs Assignment_01\\tests\\" + testFiles[i];
+        cout << "\n-> Running DFS..." << endl;
+        system(cmdDFS.c_str());
     }
 }
 
 int main() {
-    int userChoice;
+    int choice;
 
     while (true) {
-        displayMenu();
-        if (!(cin >> userChoice)) {
-            cout << "Invalid input format. Exiting wrapper system." << endl;
+        showMenu();
+        if (!(cin >> choice)) {
+            cout << "Invalid input format! Exiting wrapper." << endl;
             break;
         }
 
-        switch (userChoice) {
+        switch (choice) {
             case 1:
-                compileSSSP();
+                compileAll();
                 break;
             case 2:
-                runSingleTest();
+                runSSSPTest();
                 break;
             case 3:
-                runAllTests();
+                runBFSTest();
                 break;
             case 4:
-                cout << "Exiting SSSP wrapper system." << endl;
+                runDFSTest();
+                break;
+            case 5:
+                runTestSuite();
+                break;
+            case 6:
+                cout << "Exiting system. Good luck!" << endl;
                 return 0;
             default:
-                cout << "Invalid selection! Enter a number between 1 and 4." << endl;
+                cout << "Invalid selection! Choose between 1 and 6." << endl;
         }
     }
 
