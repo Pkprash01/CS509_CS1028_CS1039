@@ -1,129 +1,242 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <fstream>
 
-using namespace std;
+void runAssignment1() {
+    while (true) {
+        int choice;
+        std::cout << "\n--- Assignment 1: Graph Analytics (Buddy Tasks) ---\n";
+        std::cout << "1. Breadth-First Search (BFS)\n";
+        std::cout << "2. Depth-First Search (DFS)\n";
+        std::cout << "3. Single-Source Shortest Path (SSSP)\n";
+        std::cout << "0. Back to Main Menu\n";
+        std::cout << "Enter your choice (0-3): ";
+        std::cin >> choice;
 
-void showMenu() {
-    cout << "\n==============================================" << endl;
-    cout << "   CS509 ASSIGNMENT 01: FULL BUDDY WRAPPER    " << endl;
-    cout << "==============================================" << endl;
-    cout << "1. Compile All Modules (SSSP, BFS, DFS, CSR)" << endl;
-    cout << "2. Run SSSP Test" << endl;
-    cout << "3. Run BFS Test" << endl;
-    cout << "4. Run DFS Test" << endl;
-    cout << "5. Run Full Test Suite (All Algorithms)" << endl;
-    cout << "6. Exit" << endl;
-    cout << "==============================================" << endl;
-    cout << "Select an option (1-6): ";
-}
+        if (choice == 0) {
+            break; 
+        }
 
-bool compileAll() {
-    cout << "\n[Compiling All Assignment 01 Modules...]" << endl;
+        if (choice < 1 || choice > 3) {
+            std::cout << "Invalid choice! Please try again.\n";
+            continue;
+        }
 
-    int statusSSSP = system("g++ -O2 -I Assignment_01/src Assignment_01/driver/main.cpp Assignment_01/src/sssp.cpp -o Assignment_01/sssp_app.exe");
-    int statusBFSDFS = system("g++ -O2 -I Assignment_01/src Assignment_01/driver/graph_driver.cpp Assignment_01/src/bfs_dfs_algo.cpp Assignment_01/src/csr_graph.cpp -o Assignment_01/graph_app.exe");
+        int run_mode;
+        std::cout << "\nExecution Mode:\n";
+        std::cout << "1. Run a single test case\n";
+        std::cout << "2. Run all test files in batch\n";
+        std::cout << "0. Cancel / Go back\n";
+        std::cout << "Enter mode (0-2): ";
+        std::cin >> run_mode;
 
-    if (statusSSSP == 0 && statusBFSDFS == 0) {
-        cout << "Compilation successful! Executables built in Assignment_01\\" << endl;
-        return true;
+        if (run_mode == 0) {
+            continue;
+        }
+
+        std::string exec_filename, compile_cmd;
+        if (choice == 1) {
+            exec_filename = "bfs_exec";
+            compile_cmd = "g++ -O3 Assignment_01/driver/graph_driver.cpp Assignment_01/src/csr_graph.cpp Assignment_01/src/bfs_dfs_algo.cpp -o Assignment_01/driver/" + exec_filename;
+        } else if (choice == 2) {
+            exec_filename = "dfs_exec";
+            compile_cmd = "g++ -O3 Assignment_01/driver/graph_driver.cpp Assignment_01/src/csr_graph.cpp Assignment_01/src/bfs_dfs_algo.cpp -o Assignment_01/driver/" + exec_filename;
+        } else {
+            exec_filename = "sssp_exec";
+            compile_cmd = "g++ -O3 -I Assignment_01/src Assignment_01/driver/main.cpp Assignment_01/src/sssp.cpp -o Assignment_01/driver/" + exec_filename;
+        }
+
+        if (system(compile_cmd.c_str()) != 0) {
+            std::cerr << "Compilation failed for Assignment 1!\n";
+            continue;
+        }
+
+        if (run_mode == 1) {
+            std::string test_file;
+            std::cout << "Enter test file name (e.g., graph_1.txt, sssp_10.txt): ";
+            std::cin >> test_file;
+
+            std::string actual_input = test_file;
+            if (test_file.find('/') == std::string::npos && test_file.find('\\') == std::string::npos) {
+                actual_input = "Assignment_01/tests/" + test_file;
+            }
+
+            size_t dot_pos = test_file.find_last_of('.');
+            std::string name_no_ext = (dot_pos == std::string::npos) ? test_file : test_file.substr(0, dot_pos); 
+
+            std::string out_file;
+            std::string exec_cmd;
+
+            if (choice == 1) {
+                out_file = "Assignment_01/outputs/bfs_" + name_no_ext.substr(name_no_ext.find('_') + 1) + "_output.txt";
+                exec_cmd = ".\\Assignment_01\\driver\\" + exec_filename + " bfs " + actual_input + " " + out_file;
+            } else if (choice == 2) {
+                out_file = "Assignment_01/outputs/dfs_" + name_no_ext.substr(name_no_ext.find('_') + 1) + "_output.txt";
+                exec_cmd = ".\\Assignment_01\\driver\\" + exec_filename + " dfs " + actual_input + " " + out_file;
+            } else {
+                // SSSP custom output name format: sssp_out_X.txt
+                out_file = "Assignment_01/outputs/sssp_out_" + name_no_ext.substr(name_no_ext.find('_') + 1) + ".txt";
+                exec_cmd = ".\\Assignment_01\\driver\\" + exec_filename + " " + actual_input + " > " + out_file;
+            }
+
+            system(exec_cmd.c_str());
+            std::cout << "Execution complete. Output saved to " << out_file << "\n";
+        } 
+        else if (run_mode == 2) {
+            std::string sizes[] = {"1", "10", "100", "1000", "10000", "50000", "100000"};
+
+            for (int i = 0; i < 7; ++i) {
+                std::string test_file = "Assignment_01/tests/graph_" + sizes[i] + ".txt";
+                std::ifstream test_check(test_file.c_str());
+                if (!test_check.is_open()) continue;
+                test_check.close();
+
+                std::string out_file, exec_cmd;
+                if (choice == 1) {
+                    out_file = "Assignment_01/outputs/bfs_" + sizes[i] + "_output.txt";
+                    exec_cmd = ".\\Assignment_01\\driver\\" + exec_filename + " bfs " + test_file + " " + out_file;
+                } else if (choice == 2) {
+                    out_file = "Assignment_01/outputs/dfs_" + sizes[i] + "_output.txt";
+                    exec_cmd = ".\\Assignment_01\\driver\\" + exec_filename + " dfs " + test_file + " " + out_file;
+                } else {
+                    out_file = "Assignment_01/outputs/sssp_out_" + sizes[i] + ".txt";
+                    exec_cmd = ".\\Assignment_01\\driver\\" + exec_filename + " " + test_file + " > " + out_file;
+                }
+
+                system(exec_cmd.c_str());
+                std::cout << "Executed test -> Saved to " << out_file << "\n";
+            }
+        }
+        std::cout << "\n";
     }
-
-    cout << "Error during compilation! Check source files in Assignment_01\\src\\" << endl;
-    return false;
 }
 
-void runSSSPTest() {
-    string fileName;
-    cout << "\nEnter SSSP test file name (e.g., test_01.txt, sssp_100.txt): ";
-    cin >> fileName;
+void runAssignment2() {
+    while (true) {
+        int choice;
+        std::cout << "\n--- Assignment 2: ---\n";
+        std::cout << "1. Triangle Counting (TC)\n";
+        std::cout << "2. Betweenness Centrality (BC)\n";
+        std::cout << "3. Connected Components (CC)\n";
+        std::cout << "0. Back to Main Menu\n"; 
+        std::cout << "Enter your choice (0-3): ";
+        std::cin >> choice;
 
-    string command = "Assignment_01\\sssp_app.exe Assignment_01\\tests\\" + fileName;
-    cout << "\nExecuting SSSP: " << command << endl;
-    cout << "----------------------------------------------" << endl;
-    system(command.c_str());
-}
+        if (choice == 0) {
+            break; 
+        }
 
-void runBFSTest() {
-    string fileName;
-    cout << "\nEnter BFS test file name (e.g., test_01.txt, graph_10.txt): ";
-    cin >> fileName;
+        if (choice < 1 || choice > 3) {
+            std::cout << "Invalid choice! Please try again.\n";
+            continue;
+        }
 
-    string command = "Assignment_01\\graph_app.exe bfs Assignment_01\\tests\\" + fileName;
-    cout << "\nExecuting BFS: " << command << endl;
-    cout << "----------------------------------------------" << endl;
-    system(command.c_str());
-}
+        std::string driver_src, prefix, src_file, exec_filename;
+        if (choice == 1) {
+            driver_src = "Assignment_02/driver/tc_driver.cpp";
+            prefix = "tc";
+            src_file = "triangle_counting.cpp";
+            exec_filename = "tc_exec";
+        } else if (choice == 2) {
+            driver_src = "Assignment_02/driver/bc_driver.cpp";
+            prefix = "bc";
+            src_file = "betweenness_centrality.cpp";
+            exec_filename = "bc_exec";
+        } else if (choice == 3) {
+            driver_src = "Assignment_02/driver/cc_driver.cpp";
+            prefix = "cc";
+            src_file = "connected_components.cpp";
+            exec_filename = "cc_exec";
+        }
 
-void runDFSTest() {
-    string fileName;
-    cout << "\nEnter DFS test file name (e.g., test_01.txt, graph_10.txt): ";
-    cin >> fileName;
+        std::string exec_path = "Assignment_02/driver/" + exec_filename;
+        std::string compile_cmd = "g++ -O3 " + driver_src + " buddy_csr.cpp Assignment_02/src/" + src_file + " -o " + exec_path;
+        if (system(compile_cmd.c_str()) != 0) {
+            std::cerr << "Compilation failed!\n";
+            continue;
+        }
 
-    string command = "Assignment_01\\graph_app.exe dfs Assignment_01\\tests\\" + fileName;
-    cout << "\nExecuting DFS: " << command << endl;
-    cout << "----------------------------------------------" << endl;
-    system(command.c_str());
-}
+        int run_mode;
+        std::cout << "\nExecution Mode:\n";
+        std::cout << "1. Run a single test case\n";
+        std::cout << "2. Run all test files in batch\n";
+        std::cout << "0. Cancel / Go back\n"; 
+        std::cout << "Enter mode (0-2): ";
+        std::cin >> run_mode;
 
-void runTestSuite() {
-    cout << "\n[Running Complete Test Suite...]" << endl;
-    
-    string testFiles[] = {"test_01.txt", "sssp_10.txt", "sssp_100.txt"};
-    int total = 3;
+        if (run_mode == 0) {
+            continue; 
+        }
 
-    for (int i = 0; i < total; i++) {
-        cout << "\n==============================================" << endl;
-        cout << "Testing File (" << (i + 1) << "/" << total << "): " << testFiles[i] << endl;
-        cout << "==============================================" << endl;
+        if (run_mode == 1) {
+            std::string test_file;
+            std::cout << "Enter test file path (e.g., tc_1.txt or tc_10.txt): ";
+            std::cin >> test_file;
 
-        string cmdSSSP = "Assignment_01\\sssp_app.exe Assignment_01\\tests\\" + testFiles[i];
-        cout << "-> Running SSSP..." << endl;
-        system(cmdSSSP.c_str());
+            std::string actual_input = test_file;
+            if (test_file.find('/') == std::string::npos && test_file.find('\\') == std::string::npos) {
+                actual_input = "Assignment_02/tests/" + test_file;
+            }
 
-        string cmdBFS = "Assignment_01\\graph_app.exe bfs Assignment_01\\tests\\" + testFiles[i];
-        cout << "\n-> Running BFS..." << endl;
-        system(cmdBFS.c_str());
+            size_t last_slash = actual_input.find_last_of("/\\");
+            std::string filename = (last_slash == std::string::npos) ? actual_input : actual_input.substr(last_slash + 1);
+            
+            size_t dot_pos = filename.find_last_of('.');
+            std::string name_no_ext = (dot_pos == std::string::npos) ? filename : filename.substr(0, dot_pos);
 
-        string cmdDFS = "Assignment_01\\graph_app.exe dfs Assignment_01\\tests\\" + testFiles[i];
-        cout << "\n-> Running DFS..." << endl;
-        system(cmdDFS.c_str());
+            std::string out_file = "Assignment_02/outputs/" + name_no_ext + "_out.txt";
+            
+            std::string exec_cmd = ".\\Assignment_02\\driver\\" + exec_filename + " " + actual_input + " > " + out_file;
+            system(exec_cmd.c_str());
+
+            std::cout << "Execution complete. Output saved to " << out_file << "\n";
+        } 
+        else if (run_mode == 2) {
+            std::string sizes[] = {"10", "100", "10000", "50000", "100000"};
+            if (choice == 2) { 
+                sizes[2] = "1000"; sizes[3] = "5000"; sizes[4] = "10000";
+            }
+            
+            for (int i = 0; i < 5; ++i) {
+                std::string test_file = "Assignment_02/tests/" + prefix + "_" + sizes[i] + ".txt";
+                std::ifstream test_check(test_file.c_str());
+                if (!test_check.is_open()) continue;
+                test_check.close();
+
+                std::string out_file = "Assignment_02/outputs/" + prefix + "_" + sizes[i] + "_out.txt";
+                std::string exec_cmd = ".\\Assignment_02\\driver\\" + exec_filename + " " + test_file + " > " + out_file;
+                system(exec_cmd.c_str());
+                std::cout << "Executed " << test_file << " -> Saved to " << out_file << "\n";
+            }
+        }
+        std::cout << "\n";
     }
 }
 
 int main() {
-    int choice;
-
     while (true) {
-        showMenu();
-        if (!(cin >> choice)) {
-            cout << "Invalid input format! Exiting wrapper." << endl;
+        int assignment;
+        std::cout << "===============================\n";
+        std::cout << "  CS509 Common Wrapper Menu    \n";
+        std::cout << "===============================\n";
+        std::cout << "1. Assignment 1\n";
+        std::cout << "2. Assignment 2\n";
+        std::cout << "3. Exit\n";
+        std::cout << "Enter Assignment No: ";
+        std::cin >> assignment;
+
+        if (assignment == 1) {
+            runAssignment1();
+        } else if (assignment == 2) {
+            runAssignment2();
+        } else if (assignment == 3) {
+            std::cout << "Exiting wrapper. Goodbye!\n";
             break;
+        } else {
+            std::cout << "Invalid assignment number selected.\n";
         }
-
-        switch (choice) {
-            case 1:
-                compileAll();
-                break;
-            case 2:
-                runSSSPTest();
-                break;
-            case 3:
-                runBFSTest();
-                break;
-            case 4:
-                runDFSTest();
-                break;
-            case 5:
-                runTestSuite();
-                break;
-            case 6:
-                cout << "Exiting system. Good luck!" << endl;
-                return 0;
-            default:
-                cout << "Invalid selection! Choose between 1 and 6." << endl;
-        }
+        std::cout << "\n";
     }
-
     return 0;
 }
