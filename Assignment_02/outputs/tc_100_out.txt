@@ -1,0 +1,5 @@
+Algorithm: Triangle Counting
+(14, 73, 95)
+Total triangles: 1
+Triangles found:
+Execution time: 0.0000 ms

@@ -1,0 +1,5 @@
+Algorithm: Triangle Counting
+Total triangles: 1
+Triangles found:
+(Optional/Skipped for large graph scale)
+Execution time: 4.5320 ms
