@@ -1,57 +1,56 @@
-# CS509 Software Laboratory
+# CS509 Laboratory Repository — Buddy Assignments
 
-## Buddy Assignment Repository
+## Repository Overview
 
-This repository contains the Buddy Assignment work for the **CS509 Software Laboratory** course.
+This repository contains the **Buddy Assignment work for the CS509 Software Laboratory**.
 
-The repository contains two assignments:
+The repository contains three assignments:
 
-- **Assignment 01** - BFS, DFS, SSSP and CSR
-- **Assignment 02** - Triangle Counting, Betweenness Centrality and Connected Components
+1. **Assignment 01** — BFS, DFS, SSSP and CSR
+2. **Assignment 02** — Triangle Counting, Betweenness Centrality and Connected Components
+3. **Assignment 03** — Gradient Descent and Maxflow-Mincut Buddy Tasks
 
-The project is written in **C++17** and uses **CSR (Compressed Sparse Row)** for graph representation.
+The implementations are written in **C++17**. Graph algorithms use the common **CSR (Compressed Sparse Row)** representation where required.
 
 ---
 
-## 1. Student Details
+## Student Details
 
-| Student | Entry Number | 
+| Field | Details |
 |---|---|
-| Prashant Kumar | 2026CSM1028 | 
-| Vikram Gurjar | 2026CSM1039 | 
+| **Student 1** | Prashant Kumar |
+| **Entry No.** | 2026CSM1028 |
+| **Student 2** | Vikram Gurjar |
+| **Entry No.** | 2026CSM1039 |
+| **Program** | M.Tech CSE |
+| **Course** | CS509 Software Laboratory |
+| **Assignment Mode** | Buddy |
 
-| Item | Details |
+---
+
+# Language and Environment
+| Component | Configuration |
 |---|---|
-| Course | CS509 Software Laboratory |
-| Program | M.Tech CSE |
-| Language | C++ |
-| Standard | C++17 |
-| Compiler | g++ |
-| Build Tool | GNU Make |
-| Graph Representation | CSR |
-| Assignment Type | Buddy Assignment |
+| **Programming Language** | C++ |
+| **C++ Standard** | C++17 |
+| **Compiler** | GCC / g++ / MinGW-w64 |
+| **Operating Systems** | Windows / Linux |
+| **Graph Representation** | CSR |
+| **Timing Method** | `std::chrono::high_resolution_clock` |
+| **Timing Unit** | Milliseconds (`ms`) |
+| **Optimization** | `-O3` |
 
 ---
 
-## 2. Repository Overview
-
-| Assignment | Main Topic | Algorithms |
-|---|---|---|
-| Assignment 01 | Basic Graph Algorithms | BFS, DFS, SSSP, CSR |
-| Assignment 02 | Graph Processing | Triangle Counting, Betweenness Centrality, Connected Components |
-
----
-
-## 3. Repository Structure
-
+# Directory Structure
 ```text
 CS509_CS1028_CS1039/
 │
-├── README.md
-├── Makefile
+├── README.MD
 ├── wrapper.cpp
 ├── buddy_csr.cpp
 ├── buddy_csr.hpp
+├── Makefile
 ├── .gitignore
 │
 ├── Assignment_01/
@@ -61,78 +60,88 @@ CS509_CS1028_CS1039/
 │   ├── tests/
 │   └── outputs/
 │
-└── Assignment_02/
+├── Assignment_02/
+│   ├── README.md
+│   ├── src/
+│   ├── driver/
+│   ├── tests/
+│   └── outputs/
+│
+└── Assignment_03/
     ├── README.md
     ├── src/
+    │   ├── gradient_descent.cpp
+    │   ├── gradient_descent.hpp
+    │   ├── maxflow_mincut.cpp
+    │   └── maxflow_mincut.hpp
+    │
     ├── driver/
+    │   ├── gd_driver.cpp
+    │   └── maxflow_driver.cpp
+    │
     ├── tests/
+    │   ├── gd_01.txt
+    │   ├── gd_02.txt
+    │   ├── gd_03.txt
+    │   ├── gd_04.txt
+    │   ├── gd_05.txt
+    │   ├── maxflow_10.txt
+    │   ├── maxflow_100.txt
+    │   ├── maxflow_1000.txt
+    │   ├── maxflow_10000.txt
+    │   └── maxflow_50000.txt
+    │
     └── outputs/
 ```
 
 ---
 
-## 4. Root Files
-
+# Common Root Files
 | File | Purpose |
 |---|---|
-| `README.md` | Main repository documentation |
-| `Makefile` | Builds, runs and cleans the project |
-| `wrapper.cpp` | Common menu for both assignments |
+| `README.MD` | Complete repository documentation |
+| `wrapper.cpp` | Common menu for all assignments |
 | `buddy_csr.cpp` | Common CSR implementation |
 | `buddy_csr.hpp` | Common CSR declarations |
-| `.gitignore` | Git ignored files |
+| `Makefile` | Build and clean commands |
+| `.gitignore` | Ignored generated files |
 
 ---
 
-## 5. Programming Language and Tools
-
-| Tool | Details |
-|---|---|
-| Language | C++ |
-| Standard | C++17 |
-| Compiler | g++ |
-| Optimization | `-O3` |
-| Build Tool | GNU Make |
-| Graph Representation | CSR |
-| Timing | `std::chrono` |
-| Time Unit | milliseconds |
-
----
-
-## 6. Common CSR Module
-
-The root folder contains:
+# Common CSR Representation
+The common files:
 
 ```text
 buddy_csr.cpp
 buddy_csr.hpp
 ```
 
-The CSR graph contains:
+are reused by the graph assignments.
+
+The CSR structure contains:
 
 | Field | Meaning |
 |---|---|
 | `V` | Number of vertices |
 | `E` | Number of edges |
-| `row_ptr` | Starting position of each vertex's neighbours |
-| `col_idx` | Neighbour vertex numbers |
-| `values` | Edge weights |
+| `row_ptr` | Starting position of each adjacency list |
+| `col_idx` | Destination vertex numbers |
+| `values` | Edge weights or capacities |
 
-The common CSR module is used by the graph algorithms.
+The graph is loaded and converted to CSR before the graph algorithm is started.
+
+For Assignment 03 Maxflow-Mincut, CSR conversion is preprocessing and is not included in the reported algorithm execution time.
 
 ---
 
-## 7. Common Wrapper
-
+# Common Wrapper
 The file:
 
 ```text
 wrapper.cpp
 ```
 
-provides one menu for both assignments.
-
-### Example
+provides a common menu.
 
 ```text
 ===============================
@@ -141,79 +150,55 @@ provides one menu for both assignments.
 
 1. Assignment 1
 2. Assignment 2
-3. Exit
+3. Assignment 3
+4. Exit
 ```
 
 | Option | Action |
 |---|---|
 | `1` | Run Assignment 01 |
 | `2` | Run Assignment 02 |
-| `3` | Exit |
+| `3` | Run Assignment 03 Buddy Tasks |
+| `4` | Exit |
 
-After selecting an assignment, the user can run:
-
-```text
-1. Run a single test case
-2. Run all test files in batch
-0. Go back
-```
+Each assignment provides options for running individual tests or available test files in batch.
 
 ---
 
-## 8. Compilation
-
-Open a terminal in the root project folder.
-
-Run:
+# Compilation
+From the root directory:
 
 ```bash
 make compile
 ```
 
-The wrapper is compiled using:
+The project uses:
 
-```bash
-g++ -O3 wrapper.cpp -o wrapper.exe
+```text
+C++17
+g++
+-O3
 ```
 
 ---
 
-## 9. Run the Project
-
-After compilation, run:
+# Run
+Run the common wrapper using:
 
 ```bash
 make run
 ```
 
-You can also use:
+or:
 
 ```bash
 make
 ```
 
-The complete flow is:
-
-```text
-make
-  |
-  v
-Compile
-  |
-  v
-Run Wrapper
-  |
-  +------------------+
-  |                  |
-  v                  v
-Assignment 01    Assignment 02
-```
-
 ---
 
-## 10. Clean the Project
-
-To remove generated executable files and output files, run:
+# Clean
+Remove generated executable and output files using:
 
 ```bash
 make clean
@@ -221,48 +206,55 @@ make clean
 
 ---
 
-## 11. Assignment 01
+# Assignment 01
+## Assignment 01 Overview
 
 Assignment 01 contains:
 
-- Breadth First Search (BFS)
-- Depth First Search (DFS)
-- Single Source Shortest Path (SSSP)
-- CSR Graph Representation
+1. Breadth First Search (BFS)
+2. Depth First Search (DFS)
+3. Single Source Shortest Path (SSSP)
+4. CSR Graph Representation
 
-### BFS
+---
+
+## BFS
 
 BFS visits graph vertices level by level.
 
 | Item | Details |
 |---|---|
-| Data Structure | Queue |
-| Time Complexity | `O(V + E)` |
-| Space Complexity | `O(V)` |
+| **Data Structure** | Queue |
+| **Time Complexity** | `O(V + E)` |
+| **Space Complexity** | `O(V)` |
 
-### DFS
+---
+
+## DFS
 
 DFS explores one path deeply before returning.
 
 | Item | Details |
 |---|---|
-| Data Structure | Stack |
-| Time Complexity | `O(V + E)` |
-| Space Complexity | `O(V)` |
+| **Data Structure** | Stack |
+| **Time Complexity** | `O(V + E)` |
+| **Space Complexity** | `O(V)` |
 
-### SSSP
+---
+
+## SSSP
 
 SSSP finds shortest distances from one source vertex.
 
 | Item | Details |
 |---|---|
-| Algorithm | Dijkstra |
-| Time Complexity | `O(V²)` |
-| Space Complexity | `O(V)` |
+| **Algorithm** | Dijkstra |
+| **Time Complexity** | `O(V²)` |
+| **Space Complexity** | `O(V)` |
 
 ---
 
-## 12. Assignment 01 Files
+## Assignment 01 Files
 
 | File | Purpose |
 |---|---|
@@ -277,7 +269,7 @@ SSSP finds shortest distances from one source vertex.
 
 ---
 
-## 13. Assignment 01 Test Files
+## Assignment 01 Tests
 
 ### BFS and DFS
 
@@ -303,37 +295,7 @@ SSSP finds shortest distances from one source vertex.
 
 ---
 
-## 14. Assignment 01 Execution
-
-From the wrapper, select:
-
-```text
-1. Assignment 1
-```
-
-Then select the required algorithm:
-
-```text
-1. Breadth-First Search (BFS)
-2. Depth-First Search (DFS)
-3. Single-Source Shortest Path (SSSP)
-```
-
-Then select:
-
-```text
-1. Run a single test case
-```
-
-or:
-
-```text
-2. Run all test files in batch
-```
-
----
-
-## 15. Assignment 01 Output
+## Assignment 01 Output
 
 Output files are stored in:
 
@@ -341,25 +303,10 @@ Output files are stored in:
 Assignment_01/outputs/
 ```
 
-Example:
-
-```text
-bfs_10_output.txt
-bfs_100_output.txt
-bfs_1000_output.txt
-
-dfs_10_output.txt
-dfs_100_output.txt
-dfs_1000_output.txt
-
-sssp_out_1.txt
-sssp_out_10.txt
-sssp_out_100.txt
-```
-
 ---
 
-## 16. Assignment 02
+# Assignment 02
+## Assignment 02 Overview
 
 Assignment 02 contains:
 
@@ -369,21 +316,27 @@ Assignment 02 contains:
 
 All three algorithms use the CSR graph representation.
 
-### Triangle Counting
+---
+
+## Triangle Counting
 
 Triangle Counting finds the number of triangles in an undirected graph.
 
-### Betweenness Centrality
+---
+
+## Betweenness Centrality
 
 Betweenness Centrality measures the importance of vertices based on shortest paths.
 
-### Connected Components
+---
+
+## Connected Components
 
 Connected Components finds separate groups of connected vertices.
 
 ---
 
-## 17. Assignment 02 Files
+## Assignment 02 Files
 
 | File | Purpose |
 |---|---|
@@ -399,7 +352,7 @@ Connected Components finds separate groups of connected vertices.
 
 ---
 
-## 18. Assignment 02 Test Files
+## Assignment 02 Tests
 
 ### Triangle Counting
 
@@ -434,37 +387,7 @@ Connected Components finds separate groups of connected vertices.
 
 ---
 
-## 19. Assignment 02 Execution
-
-From the wrapper, select:
-
-```text
-2. Assignment 2
-```
-
-Then select:
-
-```text
-1. Triangle Counting
-2. Betweenness Centrality
-3. Connected Components
-```
-
-Then select:
-
-```text
-1. Run a single test case
-```
-
-or:
-
-```text
-2. Run all test files in batch
-```
-
----
-
-## 20. Assignment 02 Output
+## Assignment 02 Output
 
 Output files are stored in:
 
@@ -472,74 +395,397 @@ Output files are stored in:
 Assignment_02/outputs/
 ```
 
+---
+
+# Assignment 03 — Buddy Tasks
+## Assignment 03 Overview
+
+Assignment 03 contains the two Buddy Tasks:
+
+1. **Gradient Descent (GD)**
+2. **Maxflow-Mincut**
+
+The Assignment 03 implementation is written in C++17.
+
+---
+
+# 1. Gradient Descent
+Gradient Descent is used to minimize a one-variable polynomial.
+
+The polynomial is represented as:
+
+```text
+f(x) = c0 + c1*x + c2*x^2 + ... + cd*x^d
+```
+
+The derivative is calculated from the same coefficient array:
+
+```text
+f'(x) = c1 + 2*c2*x + ... + d*cd*x^(d-1)
+```
+
+The update is:
+
+```text
+x_new = x - learning_rate * f'(x)
+```
+
+The program stops when:
+
+```text
+|f'(x)| <= tolerance
+```
+
+or when the maximum number of iterations is reached.
+
+The same implementation is used for all five required degrees.
+
+---
+
+## Gradient Descent Input
+
+The input format is:
+
+```text
+DEGREE d
+COEFFICIENTS c0 c1 c2 ... cd
+INITIAL_X x0
+LEARNING_RATE alpha
+TOLERANCE epsilon
+MAX_ITERATIONS n
+```
+
+### Example
+
+```text
+DEGREE 6
+COEFFICIENTS 0 0 1 0 0.5 0 0.1
+INITIAL_X 2
+LEARNING_RATE 0.02
+TOLERANCE 0.000001
+MAX_ITERATIONS 20000
+```
+
+---
+
+## Gradient Descent Output
+
+The driver prints:
+
+```text
+Algorithm: Gradient Descent
+Degree: ...
+Final x: ...
+Final f(x): ...
+Iterations: ...
+Converged: true
+Execution time: ... ms
+```
+
+---
+
+## Gradient Descent Tests
+
+| Test File | Degree | Initial x | Rate | Tolerance | Max Iterations | Expected x* |
+|---|---:|---:|---:|---:|---:|---:|
+| `gd_01.txt` | 2 | 0 | 0.10 | 0.000001 | 5,000 | 3 |
+| `gd_02.txt` | 4 | 2 | 0.02 | 0.000001 | 10,000 | 0 |
+| `gd_03.txt` | 6 | 2 | 0.02 | 0.000001 | 20,000 | 0 |
+| `gd_04.txt` | 8 | 2 | 0.01 | 0.00000001 | 50,000 | 0 |
+| `gd_05.txt` | 10 | 2 | 0.005 | 0.0000000001 | 100,000 | 0 |
+
+---
+
+## Gradient Descent Driver
+
+```text
+Assignment_03/driver/gd_driver.cpp
+```
+
+The driver:
+
+1. Reads the polynomial input file.
+2. Validates the input parameters.
+3. Starts the timer.
+4. Calls Gradient Descent.
+5. Stops the timer.
+6. Prints the result and execution time.
+7. Releases allocated memory.
+
+Run using:
+
+```bash
+./gd_driver <input_file>
+```
+
+---
+
+# 2. Maxflow-Mincut
+Maxflow-Mincut works on a directed graph with positive integer capacities.
+
+The maximum-flow value is computed using a **Dinic-style maximum flow algorithm**.
+
+After maximum flow is complete, the residual graph is searched from the source. The reachable vertices form the source side of a valid minimum cut.
+
+The implementation reports:
+
+- Maximum flow
+- Minimum cut capacity
+- Source-side vertices
+- Sink-side vertices
+- Cut edges
+- Execution time
+
+The correctness condition is:
+
+```text
+Maximum flow = Minimum cut capacity
+```
+
+---
+
+## Maxflow-Mincut Input
+
+The input uses a directed adjacency-list format:
+
+```text
+V E
+u degree neighbor1 capacity1 neighbor2 capacity2 ...
+...
+u degree ...
+SOURCE s
+SINK t
+```
+
+Only outgoing original edges are listed. Reverse residual edges are created internally.
+
+### Example
+
+```text
+6 10
+0 2 1 16 2 13
+1 2 2 10 3 12
+2 2 1 4 4 14
+3 2 2 9 5 20
+4 2 3 7 5 4
+5 0
+SOURCE 0
+SINK 5
+```
+
+---
+
+## Maxflow-Mincut Tests
+
+| Test File | Vertices |
+|---|---:|
+| `maxflow_10.txt` | 10 |
+| `maxflow_100.txt` | 100 |
+| `maxflow_1000.txt` | 1,000 |
+| `maxflow_10000.txt` | 10,000 |
+| `maxflow_50000.txt` | 50,000 |
+
+The test graphs are directed, sparse and contain positive capacities.
+
+---
+
+## Maxflow-Mincut Driver
+
+```text
+Assignment_03/driver/maxflow_driver.cpp
+```
+
+The driver:
+
+1. Reads the graph.
+2. Validates source and sink.
+3. Converts the graph to CSR.
+4. Starts the timer after CSR preparation.
+5. Calls Maxflow-Mincut.
+6. Extracts the minimum cut.
+7. Stops the timer.
+8. Prints flow, cut and execution time.
+9. Releases allocated memory.
+
+Run using:
+
+```bash
+./maxflow_driver <input_file>
+```
+
+---
+
+# Assignment 03 CSR Requirement
+The graph input is converted to CSR before the Maxflow-Mincut algorithm starts.
+
+The flow is:
+
+```text
+Input File
+    |
+    v
+Read Graph
+    |
+    v
+CSR Conversion
+    |
+    v
+Start Timer
+    |
+    v
+Maxflow
+    |
+    v
+Minimum Cut
+    |
+    v
+Stop Timer
+```
+
+CSR conversion is preprocessing and is not included in the reported algorithm time.
+
+For Maxflow-Mincut, minimum-cut extraction from the final residual graph is part of the measured algorithm work.
+
+---
+
+# Assignment 03 Timing
+Timing uses:
+
+```cpp
+std::chrono::high_resolution_clock
+```
+
+The reported unit is:
+
+```text
+milliseconds (ms)
+```
+
+For Gradient Descent, the algorithm itself is timed.
+
+For Maxflow-Mincut, maximum flow and required minimum-cut extraction are timed.
+
+File reading, parsing and CSR conversion are outside the measured algorithm time.
+
+---
+
+# Input Validation
+## Gradient Descent
+
+The driver checks:
+
+- Valid degree
+- Correct coefficient count
+- Positive learning rate
+- Positive tolerance
+- Positive maximum iterations
+
+## Maxflow-Mincut
+
+The driver checks:
+
+- Valid vertex numbers
+- Valid source and sink
+- Source is different from sink
+- Source and sink are present
+- Positive capacities
+
+---
+
+# Assignment 03 Output
+Output files are stored in:
+
+```text
+Assignment_03/outputs/
+```
+
 Example:
 
 ```text
-tc_1_out.txt
-tc_10_out.txt
-tc_100_out.txt
+gd_01_out.txt
+gd_02_out.txt
+gd_03_out.txt
+gd_04_out.txt
+gd_05_out.txt
 
-bc_1_out.txt
-bc_10_out.txt
-bc_100_out.txt
-
-cc_1_out.txt
-cc_10_out.txt
-cc_100_out.txt
+maxflow_10_out.txt
+maxflow_100_out.txt
+maxflow_1000_out.txt
+maxflow_10000_out.txt
+maxflow_50000_out.txt
 ```
 
 ---
 
-## 21. Complexity Summary
+# Wrapper Execution
+The main menu is:
 
-| Algorithm | Time Complexity | Main Structure |
+```text
+===============================
+      CS509 Common Wrapper
+===============================
+
+1. Assignment 1
+2. Assignment 2
+3. Assignment 3
+4. Exit
+```
+
+Assignment 03 menu:
+
+```text
+--- Assignment 3: Buddy Tasks ---
+
+1. Gradient Descent
+2. Maxflow-Mincut
+0. Back to Main Menu
+```
+
+Each algorithm can be run using a single test case or all available tests.
+
+---
+
+# Complexity Summary
+| Algorithm | Main Approach | Main Data Structure |
 |---|---|---|
-| BFS | `O(V + E)` | CSR + Queue |
-| DFS | `O(V + E)` | CSR + Stack |
-| SSSP / Dijkstra | `O(V²)` | CSR + Arrays |
-| Triangle Counting | Depends on neighbour intersection | CSR |
-| Betweenness Centrality | `O(V × E)` | CSR + BFS |
-| Connected Components | `O(V + E)` | CSR + BFS |
+| BFS | Breadth-first traversal | CSR + Queue |
+| DFS | Depth-first traversal | CSR + Stack |
+| SSSP | Dijkstra | CSR + Arrays |
+| Triangle Counting | Neighbour intersection | CSR |
+| Betweenness Centrality | Shortest-path processing | CSR |
+| Connected Components | Graph traversal | CSR |
+| Gradient Descent | Polynomial optimization | Coefficient Array |
+| Maxflow-Mincut | Dinic-style maximum flow | CSR + Residual Graph |
 
-Where:
+For Gradient Descent, each iteration evaluates the polynomial derivative using the coefficient array.
 
+---
+
+# Execution Flow
 ```text
-V = Number of vertices
-E = Number of edges
+                         CS509 Repository
+                                |
+                                v
+                           make run
+                                |
+                                v
+                           wrapper.cpp
+                                |
+             +------------------+------------------+
+             |                  |                  |
+             v                  v                  v
+       Assignment 01      Assignment 02      Assignment 03
+             |                  |                  |
+       +-----+-----+      +-----+-----+      +-----+-----+
+       |     |     |      |     |     |      |           |
+       v     v     v      v     v     v      v           v
+      BFS   DFS   SSSP    TC    BC    CC    GD        Maxflow
 ```
 
 ---
 
-## 22. Execution Flow
-
-```text
-                    CS509 Repository
-                          |
-                          v
-                     make run
-                          |
-                          v
-                    wrapper.cpp
-                          |
-                +---------+---------+
-                |                   |
-                v                   v
-         Assignment 01       Assignment 02
-                |                   |
-        +-------+-------+     +-----+-----+-----+
-        |       |       |     |           |     |
-        v       v       v     v           v     v
-       BFS     DFS     SSSP   TC          BC    CC
-        |       |       |     |           |     |
-        +-------+-------+     +-----------+-----+
-                |                       |
-                v                       v
-          Output Files             Output Files
-```
-
----
-
-## 23. Input to Output Flow
+# Input to Output Flow
+## Assignment 01 and Assignment 02
 
 ```text
 Input Test File
@@ -560,54 +806,75 @@ Result + Execution Time
    Output File
 ```
 
----
-
-## 24. Runtime Measurement
-
-Execution time is measured using:
-
-```cpp
-std::chrono
-```
-
-The execution time is reported in:
+## Assignment 03 Gradient Descent
 
 ```text
-milliseconds (ms)
+Gradient Descent Input
+       |
+       v
+Read Polynomial
+       |
+       v
+Evaluate f(x) and f'(x)
+       |
+       v
+Update x
+       |
+       v
+Check Tolerance
+       |
+       v
+Result + Time
 ```
 
-For very small test cases, the execution time may be shown as:
+## Assignment 03 Maxflow-Mincut
 
 ```text
-0.0000 ms
+Graph Input
+    |
+    v
+Adjacency List
+    |
+    v
+CSR Conversion
+    |
+    v
+Residual Network
+    |
+    v
+Maximum Flow
+    |
+    v
+Minimum Cut
+    |
+    v
+Result + Time
 ```
 
 ---
 
-## 25. Important Commands
-
+# Important Commands
 | Command | Purpose |
 |---|---|
 | `make` | Build and run the project |
-| `make compile` | Compile the wrapper |
-| `make run` | Run the wrapper |
+| `make compile` | Compile the project |
+| `make run` | Run the common wrapper |
 | `make clean` | Remove generated files |
 
 ---
 
-## 26. Assignment README Files
-
+# Assignment README Files
 | README | Purpose |
 |---|---|
+| `README.MD` | Root repository documentation |
 | `Assignment_01/README.md` | Assignment 01 details |
 | `Assignment_02/README.md` | Assignment 02 details |
-| `README.md` | Complete root repository information |
+| `Assignment_03/README.md` | Assignment 03 Buddy Task details |
 
 ---
 
-## 27. Conclusion
-
-This repository contains the complete Buddy Assignment work for CS509 Software Laboratory.
+# Conclusion
+This repository contains the Buddy Assignment work for the CS509 Software Laboratory.
 
 ### Assignment 01
 
@@ -622,14 +889,24 @@ This repository contains the complete Buddy Assignment work for CS509 Software L
 - Betweenness Centrality
 - Connected Components
 
-The project uses C++17, g++, GNU Make and CSR graph representation.
+### Assignment 03
 
-The repository contains source code, drivers, test files, output files and a common wrapper for both assignments.
+- Gradient Descent
+- Maxflow-Mincut
+
+The project uses:
+
+- C++17
+- g++
+- GNU Make
+- CSR graph representation
+- `std::chrono` for timing
+
+The repository contains source files, drivers, test files, output folders, README files and a common wrapper.
 
 ---
 
-## Authors
-
+# Authors
 | Name | Entry Number |
 |---|---|
 | **Prashant Kumar** | **2026CSM1028** |
