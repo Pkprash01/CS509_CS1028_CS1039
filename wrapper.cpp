@@ -323,6 +323,121 @@ void runAssignment3() {
     }
 }
 
+
+void runAssignment4() {
+    while (true) {
+        int choice;
+        std::cout << "\n--- Assignment 4: Buddy Tasks ---\n";
+        std::cout << "1. K-Means Clustering\n";
+        std::cout << "2. FastMap\n";
+        std::cout << "0. Back to Main Menu\n";
+        std::cout << "Enter your choice (0-2): ";
+        std::cin >> choice;
+
+        if (choice == 0) {
+            break;
+        }
+
+        if (choice < 1 || choice > 2) {
+            std::cout << "Invalid choice! Please try again.\n";
+            continue;
+        }
+
+        std::string src_file, driver_file, exec_filename;
+        if (choice == 1) {
+            src_file = "Assignment_04/src/kmeans.cpp";
+            driver_file = "Assignment_04/driver/kmeans_driver.cpp";
+            exec_filename = "kmeans_exec";
+        } else {
+            src_file = "Assignment_04/src/fastmap.cpp";
+            driver_file = "Assignment_04/driver/fastmap_driver.cpp";
+            exec_filename = "fastmap_exec";
+        }
+
+        std::string exec_path = "Assignment_04/driver/" + exec_filename + ".exe";
+        std::string compile_cmd = "g++ -std=c++17 -O3 " + src_file + " " + driver_file + " -o " + exec_path;
+
+        if (system(compile_cmd.c_str()) != 0) {
+            std::cerr << "Compilation failed for Assignment 4 task!\n";
+            continue;
+        }
+
+        int run_mode;
+        std::cout << "\nExecution Mode:\n";
+        std::cout << "1. Run a single test case\n";
+        std::cout << "2. Run all test files in batch\n";
+        std::cout << "0. Cancel / Go back\n";
+        std::cout << "Enter mode (0-2): ";
+        std::cin >> run_mode;
+
+        if (run_mode == 0) {
+            continue;
+        }
+
+        if (run_mode == 1) {
+            std::string test_file;
+            std::cout << "Enter test file name (e.g., km_01.txt or fm_01.txt): ";
+            std::cin >> test_file;
+
+            std::string actual_input = test_file;
+            if (test_file.find('/') == std::string::npos && test_file.find('\\') == std::string::npos) {
+                actual_input = "Assignment_04/tests/" + test_file;
+            }
+
+            size_t last_slash = actual_input.find_last_of("/\\");
+            std::string filename = (last_slash == std::string::npos) ? actual_input : actual_input.substr(last_slash + 1);
+            size_t dot_pos = filename.find_last_of('.');
+            std::string name_no_ext = (dot_pos == std::string::npos) ? filename : filename.substr(0, dot_pos);
+
+            std::string out_file = "Assignment_04/outputs/" + name_no_ext + "_out.txt";
+            std::string exec_cmd = ".\\Assignment_04\\driver\\" + exec_filename + ".exe " +
+                                   actual_input + " " + out_file;
+
+            system(exec_cmd.c_str());
+            std::cout << "Execution complete. Output saved to " << out_file << "\n";
+        }
+        else if (run_mode == 2) {
+            if (choice == 1) {
+                std::string tests[] = {"km_01.txt", "km_02.txt", "km_03.txt", "km_04.txt"};
+
+                for (int i = 0; i < 4; ++i) {
+                    std::string test_file = "Assignment_04/tests/" + tests[i];
+                    std::ifstream test_check(test_file.c_str());
+                    if (!test_check.is_open()) continue;
+                    test_check.close();
+
+                    std::string out_file = "Assignment_04/outputs/" +
+                                           tests[i].substr(0, tests[i].find_last_of('.')) + "_out.txt";
+
+                    std::string exec_cmd = ".\\Assignment_04\\driver\\" + exec_filename + ".exe " +
+                                           test_file + " " + out_file;
+                    system(exec_cmd.c_str());
+                    std::cout << "Executed " << test_file << " -> Saved to " << out_file << "\n";
+                }
+            } else {
+                std::string tests[] = {"fm_01.txt", "fm_02.txt", "fm_03.txt", "fm_04.txt"};
+
+                for (int i = 0; i < 4; ++i) {
+                    std::string test_file = "Assignment_04/tests/" + tests[i];
+                    std::ifstream test_check(test_file.c_str());
+                    if (!test_check.is_open()) continue;
+                    test_check.close();
+
+                    std::string out_file = "Assignment_04/outputs/" +
+                                           tests[i].substr(0, tests[i].find_last_of('.')) + "_out.txt";
+
+                    std::string exec_cmd = ".\\Assignment_04\\driver\\" + exec_filename + ".exe " +
+                                           test_file + " " + out_file;
+                    system(exec_cmd.c_str());
+                    std::cout << "Executed " << test_file << " -> Saved to " << out_file << "\n";
+                }
+            }
+        }
+
+        std::cout << "\n";
+    }
+}
+
 int main() {
     while (true) {
         int assignment;
@@ -332,7 +447,8 @@ int main() {
         std::cout << "1. Assignment 1\n";
         std::cout << "2. Assignment 2\n";
         std::cout << "3. Assignment 3\n";
-        std::cout << "4. Exit\n";
+        std::cout << "4. Assignment 4\n";
+        std::cout << "5. Exit\n";
         std::cout << "Enter Assignment No: ";
         std::cin >> assignment;
 
@@ -343,6 +459,8 @@ int main() {
         } else if (assignment == 3) {
             runAssignment3();
         } else if (assignment == 4) {
+            runAssignment4();
+        } else if (assignment == 5) {
             std::cout << "Exiting wrapper. Goodbye!\n";
             break;
         } else {
