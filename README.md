@@ -4,11 +4,12 @@
 
 This repository contains the **Buddy Assignment work for the CS509 Software Laboratory**.
 
-The repository contains three assignments:
+The repository contains four assignments:
 
 1. **Assignment 01** — BFS, DFS, SSSP and CSR
 2. **Assignment 02** — Triangle Counting, Betweenness Centrality and Connected Components
 3. **Assignment 03** — Gradient Descent and Maxflow-Mincut Buddy Tasks
+4. **Assignment 04** — K-Means Clustering and FastMap Buddy Tasks
 
 The implementations are written in **C++17**. Graph algorithms use the common **CSR (Compressed Sparse Row)** representation where required.
 
@@ -67,33 +68,55 @@ CS509_CS1028_CS1039/
 │   ├── tests/
 │   └── outputs/
 │
-└── Assignment_03/
+├── Assignment_03/
+│   ├── README.md
+│   ├── src/
+│   │   ├── gradient_descent.cpp
+│   │   ├── gradient_descent.hpp
+│   │   ├── maxflow_mincut.cpp
+│   │   └── maxflow_mincut.hpp
+│   │
+│   ├── driver/
+│   │   ├── gd_driver.cpp
+│   │   └── maxflow_driver.cpp
+│   │
+│   ├── tests/
+│   │   ├── gd_01.txt
+│   │   ├── gd_02.txt
+│   │   ├── gd_03.txt
+│   │   ├── gd_04.txt
+│   │   ├── gd_05.txt
+│   │   ├── maxflow_10.txt
+│   │   ├── maxflow_100.txt
+│   │   ├── maxflow_1000.txt
+│   │   ├── maxflow_10000.txt
+│   │   └── maxflow_50000.txt
+│   │
+│   └── outputs/
+│
+└── Assignment_04/
     ├── README.md
     ├── src/
-    │   ├── gradient_descent.cpp
-    │   ├── gradient_descent.hpp
-    │   ├── maxflow_mincut.cpp
-    │   └── maxflow_mincut.hpp
+    │   ├── kmeans.cpp
+    │   ├── kmeans.hpp
+    │   ├── fastmap.cpp
+    │   └── fastmap.hpp
     │
     ├── driver/
-    │   ├── gd_driver.cpp
-    │   └── maxflow_driver.cpp
+    │   ├── kmeans_driver.cpp
+    │   └── fastmap_driver.cpp
     │
     ├── tests/
-    │   ├── gd_01.txt
-    │   ├── gd_02.txt
-    │   ├── gd_03.txt
-    │   ├── gd_04.txt
-    │   ├── gd_05.txt
-    │   ├── maxflow_10.txt
-    │   ├── maxflow_100.txt
-    │   ├── maxflow_1000.txt
-    │   ├── maxflow_10000.txt
-    │   └── maxflow_50000.txt
+    │   ├── km_01.txt
+    │   ├── km_02.txt
+    │   ├── km_03.txt
+    │   ├── km_04.txt
+    │   ├── fm_01.txt
+    │   ├── fm_02.txt
+    │   └── fm_03.txt
     │
     └── outputs/
 ```
-
 ---
 
 # Common Root Files
@@ -151,7 +174,8 @@ provides a common menu.
 1. Assignment 1
 2. Assignment 2
 3. Assignment 3
-4. Exit
+4. Assignment 4
+5. Exit
 ```
 
 | Option | Action |
@@ -159,7 +183,8 @@ provides a common menu.
 | `1` | Run Assignment 01 |
 | `2` | Run Assignment 02 |
 | `3` | Run Assignment 03 Buddy Tasks |
-| `4` | Exit |
+| `4` | Run Assignment 04 Buddy Tasks |
+| `5` | Exit |
 
 Each assignment provides options for running individual tests or available test files in batch.
 
@@ -728,7 +753,8 @@ The main menu is:
 1. Assignment 1
 2. Assignment 2
 3. Assignment 3
-4. Exit
+4. Assignment 4
+5. Exit
 ```
 
 Assignment 03 menu:
@@ -745,6 +771,183 @@ Each algorithm can be run using a single test case or all available tests.
 
 ---
 
+# Assignment 04 — Buddy Tasks
+## Assignment 04 Overview
+
+Assignment 04 contains the two Buddy Tasks:
+
+1. **K-Means Clustering**
+2. **FastMap**
+
+The Assignment 04 implementation is written in C++17.
+
+---
+
+# 1. K-Means Clustering
+K-Means is an iterative clustering algorithm used to divide data points into `K` clusters.
+
+The implementation starts with the first `K` input points as the initial centroids. Each point is assigned to the nearest centroid using Euclidean distance. The centroids are then recomputed from the assigned points.
+
+The process continues until the assignments stop changing, the centroid movement becomes smaller than the given tolerance, or the maximum number of iterations is reached.
+
+The program reports the final cluster assignments, final centroids, WCSS (Within-Cluster Sum of Squares), number of iterations and execution time.
+
+---
+
+## K-Means Input
+The input format is:
+
+```text
+N D K
+point coordinates ...
+MAX_ITERATIONS value
+TOLERANCE value
+```
+
+Here, `N` is the number of points, `D` is the number of dimensions and `K` is the number of clusters.
+
+---
+
+## K-Means Tests
+
+| Test File | Purpose |
+|---|---|
+| `km_01.txt` | Small clustering test |
+| `km_02.txt` | Medium clustering test |
+| `km_03.txt` | Larger clustering test |
+| `km_04.txt` | Larger dimensional clustering test |
+
+---
+
+## K-Means Driver
+
+```text
+Assignment_04/driver/kmeans_driver.cpp
+```
+
+The driver reads the input file, starts the timer, calls the K-Means implementation, writes the result to the output file and prints the execution time.
+
+Run using:
+
+```bash
+./kmeans_driver <input_file> <output_file>
+```
+
+---
+
+# 2. FastMap
+FastMap is a dimensionality reduction algorithm that maps objects from a distance space into a lower-dimensional coordinate space.
+
+For each dimension, the implementation selects a farthest pair of pivot objects. The coordinates of the objects are calculated using their distances to the selected pivots. The remaining distances are then deflated before processing the next dimension.
+
+The program reports the selected pivots, generated coordinates and execution time.
+
+---
+
+## FastMap Input
+The input format is:
+
+```text
+N K
+N x N distance matrix
+```
+
+Here, `N` is the number of objects and `K` is the target number of dimensions.
+
+---
+
+## FastMap Tests
+
+| Test File | Purpose |
+|---|---|
+| `fm_01.txt` | Small distance-matrix test |
+| `fm_02.txt` | Medium distance-matrix test |
+| `fm_03.txt` | Larger distance-matrix test |
+
+A very large `10,000 x 10,000` distance matrix is not included in the repository because the text input would be extremely large and the current implementation stores the distance matrix in memory.
+
+---
+
+## FastMap Driver
+
+```text
+Assignment_04/driver/fastmap_driver.cpp
+```
+
+The driver reads the distance matrix, starts the timer, calls FastMap, writes the result to the output file and prints the execution time.
+
+Run using:
+
+```bash
+./fastmap_driver <input_file> <output_file>
+```
+
+---
+
+# Assignment 04 Output
+Output files are stored in:
+
+```text
+Assignment_04/outputs/
+```
+
+Example output files are:
+
+```text
+km_01_out.txt
+km_02_out.txt
+km_03_out.txt
+km_04_out.txt
+
+fm_01_out.txt
+fm_02_out.txt
+fm_03_out.txt
+```
+
+---
+
+# Assignment 04 Wrapper Execution
+The Assignment 04 menu is:
+
+```text
+--- Assignment 4: Buddy Tasks ---
+
+1. K-Means Clustering
+2. FastMap
+0. Back to Main Menu
+```
+
+Each task can be run using a single test case or all available test files.
+
+---
+
+# Assignment 04 Timing
+Timing uses:
+
+```cpp
+std::chrono::high_resolution_clock
+```
+
+The reported unit is:
+
+```text
+milliseconds (ms)
+```
+
+For K-Means, the measured work includes the clustering iterations and centroid updates. For FastMap, the measured work includes pivot selection, coordinate calculation and distance deflation.
+
+File reading and input parsing are outside the measured algorithm time.
+
+---
+
+# Assignment 04 Complexity Summary
+| Algorithm | Main Approach | Main Data Structure |
+|---|---|---|
+| K-Means | Repeated assignment and centroid update | Arrays |
+| FastMap | Pivot selection and distance deflation | Distance Matrix + Arrays |
+
+---
+
 # Complexity Summary
 | Algorithm | Main Approach | Main Data Structure |
 |---|---|---|
@@ -756,6 +959,8 @@ Each algorithm can be run using a single test case or all available tests.
 | Connected Components | Graph traversal | CSR |
 | Gradient Descent | Polynomial optimization | Coefficient Array |
 | Maxflow-Mincut | Dinic-style maximum flow | CSR + Residual Graph |
+| K-Means | Iterative clustering | Arrays |
+| FastMap | Dimensionality reduction | Distance Matrix + Arrays |
 
 For Gradient Descent, each iteration evaluates the polynomial derivative using the coefficient array.
 
@@ -771,19 +976,18 @@ For Gradient Descent, each iteration evaluates the polynomial derivative using t
                                 v
                            wrapper.cpp
                                 |
-             +------------------+------------------+
-             |                  |                  |
-             v                  v                  v
-       Assignment 01      Assignment 02      Assignment 03
-             |                  |                  |
-       +-----+-----+      +-----+-----+      +-----+-----+
-       |     |     |      |     |     |      |           |
-       v     v     v      v     v     v      v           v
-      BFS   DFS   SSSP    TC    BC    CC    GD        Maxflow
+          +-------------------+-------------------+-------------------+
+          |                   |                   |                   |
+          v                   v                   v                   v
+    Assignment 01       Assignment 02       Assignment 03       Assignment 04
+          |                   |                   |                   |
+    +-----+-----+       +-----+-----+       +-----+-----+       +-----+-----+
+    |     |     |       |     |     |       |           |       |           |
+    v     v     v       v     v     v       v           v       v           v
+   BFS   DFS   SSSP     TC    BC    CC      GD       Maxflow  K-Means    FastMap
 ```
 
 ---
-
 # Input to Output Flow
 ## Assignment 01 and Assignment 02
 
@@ -870,6 +1074,7 @@ Result + Time
 | `Assignment_01/README.md` | Assignment 01 details |
 | `Assignment_02/README.md` | Assignment 02 details |
 | `Assignment_03/README.md` | Assignment 03 Buddy Task details |
+| `Assignment_04/README.md` | Assignment 04 Buddy Task details |
 
 ---
 
@@ -893,6 +1098,11 @@ This repository contains the Buddy Assignment work for the CS509 Software Labora
 
 - Gradient Descent
 - Maxflow-Mincut
+
+### Assignment 04
+
+- K-Means Clustering
+- FastMap
 
 The project uses:
 
